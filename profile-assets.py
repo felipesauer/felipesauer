@@ -69,12 +69,16 @@ NEOFETCH_ART = [
     "    \\___)=(___/     ",
 ]
 
-# Grafico de barras da janela de stats: o equivalente do Tux.
-# Desenhado com retangulos, nao com "█": o bloco nao preenche a entrelinha
-# inteira e as barras saem com emendas horizontais visiveis.
-STATS_BARRAS = [3, 4, 5, 6]     # altura de cada barra, em celulas
-STATS_COLS = 20                 # mesma largura do Tux, em caracteres
-STATS_LINHAS = 7                # mesma altura do Tux, em linhas
+# Mascote da janela de stats, no mesmo peso do pinguim que fica no banner.
+STATS_ART = [
+    "    /\\_/\\       ",
+    "   ( o.o )      ",
+    "    > ^ <       ",
+    "   /|   |\\      ",
+    "  (_|   |_)     ",
+    "     | |        ",
+    "    ~   ~       ",
+]
 
 NEOFETCH_CAMPOS = [
     ("OS", "Full Stack Developer"), ("Host", "Brazil"),
@@ -178,18 +182,13 @@ def stats(tema):
     y = TB + 16 * S
     prompt(d, PADX, y, "gh profile --stats", FS, c, cw); y += LH * 2
 
-    # grafico encostado a direita, espelhando o pinguim que fica a esquerda no banner
-    larg_barra = int(cw * 3)
-    vao = int(cw * 2)
-    total = len(STATS_BARRAS) * larg_barra + (len(STATS_BARRAS) - 1) * vao
-    ax = W_BOX - PADX - int(cw * 2) - total
-    base = y + STATS_LINHAS * LH - int(LH * 0.6)
-    for i, alt in enumerate(STATS_BARRAS):
-        x0 = ax + i * (larg_barra + vao)
-        y0 = base - alt * LH
-        d.rectangle([x0, y0, x0 + larg_barra, base - int(LH * 0.15)], fill=c["VERDE"])
-    d.rectangle([ax - int(cw * 0.5), base, ax + total + int(cw * 0.5), base + max(2, S)],
-                fill=c["VERDE"])
+    # mascote encostado a direita, espelhando o pinguim que fica a esquerda no banner
+    ax = W_BOX - PADX - int(max(len(l) for l in STATS_ART) * cw) - int(cw * 2)
+    ay = y
+    for l in STATS_ART:
+        d.text((ax, ay), l, font=f(FONT_R, FS), fill=c["VERDE"])
+        ay += LH
+
     for k, v in STATS:
         d.text((PADX, y), k.ljust(lab_w), font=f(FONT_R, FS), fill=c["AZUL"])
         d.text((PADX + (lab_w + 2) * cw, y), v, font=f(FONT_B, FS), fill=c["FG"])
