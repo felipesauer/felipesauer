@@ -59,11 +59,19 @@ def _carrega_stats():
 
 STATS, LANGS = _carrega_stats()
 
-NEOFETCH_ART = [
-    "        .--.        ", "       |o_o |       ", "       |:_/ |       ",
-    "      //   \\ \\      ", "     (|     | )     ", "    /'\\_   _/`\\     ",
-    "    \\___)=(___/     ",
-]
+# "FELIPE" como bitmap 5x4 por letra. Desenhado com retangulos em vez de texto:
+# arte ASCII depende de a fonte conectar os tracos, o que a JetBrains Mono nao faz.
+LETRAS = {
+    "F": ["1111", "1000", "1110", "1000", "1000"],
+    "E": ["1111", "1000", "1110", "1000", "1111"],
+    "L": ["1000", "1000", "1000", "1000", "1111"],
+    "I": ["1110", "0100", "0100", "0100", "1110"],
+    "P": ["1111", "1001", "1111", "1000", "1000"],
+}
+NOME_ARTE = "FELIPE"
+BLOCO = 11          # lado de cada pixel do bitmap, em px
+ART_COLS = len(NOME_ARTE) * 5 - 1     # 4 colunas por letra + 1 de respiro
+ART_LINHAS = 5
 NEOFETCH_CAMPOS = [
     ("OS", "Full Stack Developer"), ("Host", "Brazil"),
     ("Kernel", "TypeScript / PHP"), ("Shell", "bash on Linux"),
@@ -76,7 +84,26 @@ NEOFETCH_CAMPOS = [
     ("AI", "coding agents, decision auditing"),
 ]
 
-TB = 36  # altura da barra de titulo
+TB = 36   # altura da barra de titulo
+FS = 17   # corpo da fonte, unico para todas as janelas
+LH = 25   # entrelinha
+PADX = 26
+
+def _dimensoes():
+    """Caixa unica: todas as janelas usam a maior largura e altura necessarias,
+    para ficarem simetricas lado a lado na pagina."""
+    cw = largura_char(FS)
+    art_w = int(ART_COLS * BLOCO / largura_char(FS)) + 2
+    lab_w = max(len(k) for k, _ in NEOFETCH_CAMPOS)
+    val_w = max(len(v) for _, v in NEOFETCH_CAMPOS)
+    largura_neofetch = art_w + 3 + lab_w + 2 + val_w
+    largura_stats = max(len(k) for k, _ in STATS) + 2 + 12
+    largura_langs = max(len(k) for k, _ in LANGS) + 2 + 24 + 8
+    cols = max(largura_neofetch, largura_stats, largura_langs, len(HOST) + 22)
+    linhas = max(2 + max(ART_LINHAS, len(NEOFETCH_CAMPOS) + 2),
+                 2 + len(STATS) + 1 + len(LANGS))
+    return int(PADX * 2 + cols * cw), TB + 16 + LH * linhas + 16, cw
+
 
 
 def moldura(W, H, c):
@@ -109,63 +136,46 @@ def largura_char(fs):
     return ImageDraw.Draw(Image.new("RGB", (8, 8))).textlength("M", font=f(FONT_R, fs))
 
 
+W_BOX, H_BOX, CW = _dimensoes()
+
+
 def banner(tema):
-    # mesma escala do neofetch (FS 17 / LH 25) para as duas janelas casarem na pagina
-    c, FS, LH, PADX = TEMAS[tema], 17, 25, 26
-    cw = largura_char(FS)
-    saida = ["Full Stack Developer",
-             "TypeScript  PHP  React  Node.js  Laravel  PostgreSQL  Docker"]
-    maior = max([len(HOST) + 4 + len("cat profile.txt")] + [len(s) for s in saida])
-    W, H = int(PADX * 2 + maior * cw), TB + 18 + LH * 5 + 14
-    img, d = moldura(W, H, c)
-    y = TB + 18
-    prompt(d, PADX, y, "cat profile.txt", FS, c, cw); y += LH
-    d.text((PADX, y - 2), "Felipe Sauer", font=f(FONT_B, 32), fill=c["VERDE"]); y += LH + 14
-    for s in saida:
-        d.text((PADX, y), s, font=f(FONT_R, FS), fill=c["FG"]); y += LH
-    x = prompt(d, PADX, y, "", FS, c, cw)
-    d.rectangle([x, y + 2, x + cw - 2, y + FS + 4], fill=c["FG"])
-    return img
-
-
-def neofetch(tema):
-    c, FS, LH, PADX = TEMAS[tema], 17, 25, 26
-    cw = largura_char(FS)
-    art_w = int(max(len(l) for l in NEOFETCH_ART) * cw)
-    lab_w = int(max(len(k) for k, _ in NEOFETCH_CAMPOS) * cw)
-    val_w = int(max(len(v) for _, v in NEOFETCH_CAMPOS) * cw)
-    W = int(PADX * 2 + art_w + cw * 3 + lab_w + cw * 2 + val_w)
-    W = max(W, int(PADX * 2 + (len(HOST) + 12) * cw))
-    H = TB + 16 + LH * (len(NEOFETCH_CAMPOS) + 4) + 14
-    img, d = moldura(W, H, c)
+    """Janela principal: arte do nome a esquerda, campos a direita (estilo neofetch)."""
+    c = TEMAS[tema]
+    art_w = ART_COLS * BLOCO
+    lab_w = int(max(len(k) for k, _ in NEOFETCH_CAMPOS) * CW)
+    img, d = moldura(W_BOX, H_BOX, c)
     y = TB + 16
-    prompt(d, PADX, y, "neofetch", FS, c, cw); y += LH * 2
-    ay = y
-    for l in NEOFETCH_ART:
-        d.text((PADX, ay), l, font=f(FONT_R, FS), fill=c["VERDE"]); ay += LH
-    cx, cy = PADX + art_w + int(cw * 3), y
+    prompt(d, PADX, y, "neofetch", FS, c, CW)
+    y += LH * 2
+    ay = y + 8
+    for li, letra in enumerate(NOME_ARTE):
+        base = PADX + li * 5 * BLOCO
+        for row, bits in enumerate(LETRAS[letra]):
+            for col, bit in enumerate(bits):
+                if bit == "1":
+                    x0 = base + col * BLOCO
+                    y0 = ay + row * BLOCO
+                    d.rectangle([x0, y0, x0 + BLOCO - 1, y0 + BLOCO - 1], fill=c["VERDE"])
+    cx, cy = PADX + art_w + int(CW * 3), y
     d.text((cx, cy), "felipe", font=f(FONT_B, FS), fill=c["VERDE"])
-    d.text((cx + cw * 6, cy), "@", font=f(FONT_R, FS), fill=c["FG"])
-    d.text((cx + cw * 7, cy), "felipe-sauer", font=f(FONT_B, FS), fill=c["AZUL"])
+    d.text((cx + CW * 6, cy), "@", font=f(FONT_R, FS), fill=c["FG"])
+    d.text((cx + CW * 7, cy), "felipe-sauer", font=f(FONT_B, FS), fill=c["AZUL"])
     cy += LH
     d.text((cx, cy), "-" * 34, font=f(FONT_R, FS), fill=c["DIM"]); cy += LH
     for k, v in NEOFETCH_CAMPOS:
         if k:
             d.text((cx, cy), f"{k}:", font=f(FONT_B, FS), fill=c["AZUL"])
-            d.text((cx + lab_w + int(cw * 2), cy), v, font=f(FONT_R, FS), fill=c["FG"])
+            d.text((cx + lab_w + int(CW * 2), cy), v, font=f(FONT_R, FS), fill=c["FG"])
         cy += LH
     return img
 
 
 def stats(tema):
-    c, FS, LH, PADX, BARRA = TEMAS[tema], 17, 25, 26, 24
-    cw = largura_char(FS)
+    c, BARRA, cw = TEMAS[tema], 24, CW
     lab_w = max(len(k) for k, _ in STATS)
     lang_w = max(len(k) for k, _ in LANGS)
-    linhas = 2 + len(STATS) + 2 + len(LANGS)
-    W = int(PADX * 2 + max(len(HOST) + 14, lang_w + 3 + BARRA + 8) * cw)
-    H = TB + 16 + LH * (linhas + 1) + 14
-    img, d = moldura(W, H, c)
+    img, d = moldura(W_BOX, H_BOX, c)
     y = TB + 16
     prompt(d, PADX, y, "gh profile --stats", FS, c, cw); y += LH * 2
     for k, v in STATS:
@@ -186,7 +196,7 @@ def stats(tema):
 
 if __name__ == "__main__":
     os.makedirs(OUT_DIR, exist_ok=True)
-    for nome, fn in (("banner", banner), ("neofetch", neofetch), ("stats", stats)):
+    for nome, fn in (("banner", banner), ("stats", stats)):
         for tema in ("dark", "light"):
             sufixo = "" if tema == "dark" else "-light"
             caminho = os.path.join(OUT_DIR, f"{nome}{sufixo}.png")
