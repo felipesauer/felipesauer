@@ -1,0 +1,72 @@
+name: Update profile assets
+
+# Regenera banner, neofetch e stats com os números atualizados.
+# Os cards são PNGs próprios (sem serviço de terceiros), então precisam
+# deste job para não congelar no tempo.
+on:
+  schedule:
+    - cron: '0 6 * * 1'      # toda segunda, 06:00 UTC
+  workflow_dispatch:          # permite rodar à mão pela aba Actions
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Instala a fonte JetBrains Mono
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq fonts-jetbrains-mono fontconfig
+          fc-cache -f
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Instala Pillow
+        run: pip install --quiet pillow
+
+      - name: Coleta as estatísticas do perfil
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api graphql -f query='{ user(login:"felipesauer"){
+            followers{totalCount}
+            repositories(first:100, ownerAffiliations:OWNER, privacy:PUBLIC, isFork:false){
+              totalCount
+              nodes{ stargazerCount languages(first:10, orderBy:{field:SIZE, direction:DESC}){ edges{ size node{ name } } } }
+            }
+            contributionsCollection{ totalCommitContributions }
+          } }' --jq '
+            .data.user as $u |
+            ($u.repositories.nodes | map(.stargazerCount) | add) as $stars |
+            ($u.repositories.nodes | map(.languages.edges[]) | group_by(.node.name)
+               | map({lang: .[0].node.name, size: (map(.size) | add)}) | sort_by(-.size)) as $l |
+            ($l | map(.size) | add) as $total |
+            {
+              repos:     $u.repositories.totalCount,
+              stars:     $stars,
+              followers: $u.followers.totalCount,
+              commits:   $u.contributionsCollection.totalCommitContributions,
+              langs:     [$l[] | {lang: .lang, pct: ((.size * 1000 / $total | floor) / 10)}]
+            }' > assets/stats.json
+          cat assets/stats.json
+
+      - name: Regenera as imagens
+        run: python3 profile-assets.py
+
+      - name: Commita se algo mudou
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/
+          if git diff --staged --quiet; then
+            echo "nada mudou"
+          else
+            git commit -m "chore(assets): atualiza estatísticas do perfil"
+            git push
+          fi
