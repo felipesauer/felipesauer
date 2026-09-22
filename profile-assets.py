@@ -59,19 +59,16 @@ def _carrega_stats():
 
 STATS, LANGS = _carrega_stats()
 
-# "FELIPE" como bitmap 5x4 por letra. Desenhado com retangulos em vez de texto:
-# arte ASCII depende de a fonte conectar os tracos, o que a JetBrains Mono nao faz.
-LETRAS = {
-    "F": ["1111", "1000", "1110", "1000", "1000"],
-    "E": ["1111", "1000", "1110", "1000", "1111"],
-    "L": ["1000", "1000", "1000", "1000", "1111"],
-    "I": ["1110", "0100", "0100", "0100", "1110"],
-    "P": ["1111", "1001", "1111", "1000", "1000"],
-}
-NOME_ARTE = "FELIPE"
-BLOCO = 11 * 2      # lado de cada pixel do bitmap (ja em 2x, ver S)
-ART_COLS = len(NOME_ARTE) * 5 - 1     # 4 colunas por letra + 1 de respiro
-ART_LINHAS = 5
+NEOFETCH_ART = [
+    "        .--.        ",
+    "       |o_o |       ",
+    "       |:_/ |       ",
+    "      //   \\ \\      ",
+    "     (|     | )     ",
+    "    /'\\_   _/`\\     ",
+    "    \\___)=(___/     ",
+]
+
 NEOFETCH_CAMPOS = [
     ("OS", "Full Stack Developer"), ("Host", "Brazil"),
     ("Kernel", "TypeScript / PHP"), ("Shell", "bash on Linux"),
@@ -94,14 +91,14 @@ def _dimensoes():
     """Caixa unica: todas as janelas usam a maior largura e altura necessarias,
     para ficarem simetricas lado a lado na pagina."""
     cw = largura_char(FS)
-    art_w = int(ART_COLS * BLOCO / largura_char(FS)) + 2
+    art_w = max(len(l) for l in NEOFETCH_ART)
     lab_w = max(len(k) for k, _ in NEOFETCH_CAMPOS)
     val_w = max(len(v) for _, v in NEOFETCH_CAMPOS)
     largura_neofetch = art_w + 3 + lab_w + 2 + val_w
     largura_stats = max(len(k) for k, _ in STATS) + 2 + 12
     largura_langs = max(len(k) for k, _ in LANGS) + 2 + 24 + 8
     cols = max(largura_neofetch, largura_stats, largura_langs, len(HOST) + 22)
-    linhas = max(2 + max(ART_LINHAS, len(NEOFETCH_CAMPOS) + 2),
+    linhas = max(2 + max(len(NEOFETCH_ART), len(NEOFETCH_CAMPOS) + 2),
                  2 + len(STATS) + 1 + len(LANGS))
     return int(PADX * 2 + cols * cw), TB + 16 * S + LH * linhas + 20 * S, cw
 
@@ -143,21 +140,15 @@ W_BOX, H_BOX, CW = _dimensoes()
 def banner(tema):
     """Janela principal: arte do nome a esquerda, campos a direita (estilo neofetch)."""
     c = TEMAS[tema]
-    art_w = ART_COLS * BLOCO
+    art_w = int(max(len(l) for l in NEOFETCH_ART) * CW)
     lab_w = int(max(len(k) for k, _ in NEOFETCH_CAMPOS) * CW)
     img, d = moldura(W_BOX, H_BOX, c)
     y = TB + 16 * S
     prompt(d, PADX, y, "neofetch", FS, c, CW)
     y += LH * 2
-    ay = y + 8 * S
-    for li, letra in enumerate(NOME_ARTE):
-        base = PADX + li * 5 * BLOCO
-        for row, bits in enumerate(LETRAS[letra]):
-            for col, bit in enumerate(bits):
-                if bit == "1":
-                    x0 = base + col * BLOCO
-                    y0 = ay + row * BLOCO
-                    d.rectangle([x0, y0, x0 + BLOCO - 1, y0 + BLOCO - 1], fill=c["VERDE"])
+    ay = y
+    for l in NEOFETCH_ART:
+        d.text((PADX, ay), l, font=f(FONT_R, FS), fill=c["VERDE"]); ay += LH
     cx, cy = PADX + art_w + int(CW * 3), y
     d.text((cx, cy), "felipe", font=f(FONT_B, FS), fill=c["VERDE"])
     d.text((cx + CW * 6, cy), "@", font=f(FONT_R, FS), fill=c["FG"])
