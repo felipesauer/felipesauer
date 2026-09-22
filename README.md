@@ -1,9 +1,9 @@
 <div align="center">
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/felipesauer/felipesauer/main/assets/banner.png">
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/felipesauer/felipesauer/main/assets/banner-light.png">
-  <img src="https://raw.githubusercontent.com/felipesauer/felipesauer/main/assets/banner.png" alt="neofetch output for Felipe Sauer: Full Stack Developer, Brazil, TypeScript and PHP, bash on Linux. Backend Node.js, Laravel, REST APIs. Frontend React, Next.js, TailwindCSS. Database PostgreSQL, MySQL, Neo4j. Infra Docker, GitHub Actions, Cloudflare. Quality TypeScript strict, PHPStan max, tests." width="868">
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/felipesauer/felipesauer/main/assets/banner.png?v=202609221226">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/felipesauer/felipesauer/main/assets/banner-light.png?v=202609221226">
+  <img src="https://raw.githubusercontent.com/felipesauer/felipesauer/main/assets/banner.png?v=202609221226" alt="neofetch output for Felipe Sauer: Full Stack Developer, Brazil, TypeScript and PHP, bash on Linux. Backend Node.js, Laravel, REST APIs. Frontend React, Next.js, TailwindCSS. Database PostgreSQL, MySQL, Neo4j. Infra Docker, GitHub Actions, Cloudflare. Quality TypeScript strict, PHPStan max, tests." width="868">
 </picture>
 
 <br><br>
@@ -106,9 +106,9 @@ Safe access to **nested data via dot notation** across JSON, YAML, XML, INI, ENV
 <div align="center">
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/felipesauer/felipesauer/main/assets/stats.png">
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/felipesauer/felipesauer/main/assets/stats-light.png">
-  <img src="https://raw.githubusercontent.com/felipesauer/felipesauer/main/assets/stats.png" alt="GitHub stats: 10 public repositories, 38 stars, 16 followers, 1442 commits in the last year. Languages: TypeScript 86.1 percent, PHP 8.6 percent, JavaScript 3.7 percent, Python 1.1 percent" width="868">
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/felipesauer/felipesauer/main/assets/stats.png?v=202609221226">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/felipesauer/felipesauer/main/assets/stats-light.png?v=202609221226">
+  <img src="https://raw.githubusercontent.com/felipesauer/felipesauer/main/assets/stats.png?v=202609221226" alt="GitHub stats: 10 public repositories, 38 stars, 16 followers, 1442 commits in the last year. Languages: TypeScript 86.1 percent, PHP 8.6 percent, JavaScript 3.7 percent, Python 1.1 percent" width="868">
 </picture>
 
 </div>

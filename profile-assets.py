@@ -69,7 +69,7 @@ LETRAS = {
     "P": ["1111", "1001", "1111", "1000", "1000"],
 }
 NOME_ARTE = "FELIPE"
-BLOCO = 11          # lado de cada pixel do bitmap, em px
+BLOCO = 11 * 2      # lado de cada pixel do bitmap (ja em 2x, ver S)
 ART_COLS = len(NOME_ARTE) * 5 - 1     # 4 colunas por letra + 1 de respiro
 ART_LINHAS = 5
 NEOFETCH_CAMPOS = [
@@ -84,10 +84,11 @@ NEOFETCH_CAMPOS = [
     ("AI", "coding agents, decision auditing"),
 ]
 
-TB = 36   # altura da barra de titulo
-FS = 17   # corpo da fonte, unico para todas as janelas
-LH = 25   # entrelinha
-PADX = 26
+S = 2     # renderiza em 2x; o README exibe com metade da largura (telas HiDPI)
+TB = 36 * S   # altura da barra de titulo
+FS = 17 * S   # corpo da fonte, unico para todas as janelas
+LH = 25 * S   # entrelinha
+PADX = 26 * S
 
 def _dimensoes():
     """Caixa unica: todas as janelas usam a maior largura e altura necessarias,
@@ -102,7 +103,7 @@ def _dimensoes():
     cols = max(largura_neofetch, largura_stats, largura_langs, len(HOST) + 22)
     linhas = max(2 + max(ART_LINHAS, len(NEOFETCH_CAMPOS) + 2),
                  2 + len(STATS) + 1 + len(LANGS))
-    return int(PADX * 2 + cols * cw), TB + 16 + LH * linhas + 16, cw
+    return int(PADX * 2 + cols * cw), TB + 16 * S + LH * linhas + 20 * S, cw
 
 
 
@@ -110,14 +111,14 @@ def moldura(W, H, c):
     """Janela de terminal: barra de titulo, botoes e borda."""
     img = Image.new("RGB", (W, H), c["BG"])
     d = ImageDraw.Draw(img)
-    d.rounded_rectangle([0, 0, W - 1, H - 1], 8, fill=c["BG"], outline=c["BORDER"])
-    d.rounded_rectangle([0, 0, W - 1, TB], 8, fill=c["WIN"])
-    d.rectangle([0, TB - 8, W - 1, TB], fill=c["WIN"])
-    d.line([(0, TB), (W - 1, TB)], fill=c["BORDER"])
+    d.rounded_rectangle([0, 0, W - 1, H - 1], 8 * S, fill=c["BG"], outline=c["BORDER"], width=S)
+    d.rounded_rectangle([0, 0, W - 1, TB], 8 * S, fill=c["WIN"])
+    d.rectangle([0, TB - 8 * S, W - 1, TB], fill=c["WIN"])
+    d.line([(0, TB), (W - 1, TB)], fill=c["BORDER"], width=S)
     for i, cor in enumerate([(255, 95, 86), (255, 189, 46), (39, 201, 63)]):
-        d.ellipse([16 + i * 20, 12, 27 + i * 20, 23], fill=cor)
+        d.ellipse([16 * S + i * 20 * S, 12 * S, 27 * S + i * 20 * S, 23 * S], fill=cor)
     t = f"{HOST}: ~"
-    d.text(((W - d.textlength(t, font=f(FONT_R, 14))) / 2, 11), t, font=f(FONT_R, 14), fill=c["DIM"])
+    d.text(((W - d.textlength(t, font=f(FONT_R, 14 * S))) / 2, 11 * S), t, font=f(FONT_R, 14 * S), fill=c["DIM"])
     return img, d
 
 
@@ -145,10 +146,10 @@ def banner(tema):
     art_w = ART_COLS * BLOCO
     lab_w = int(max(len(k) for k, _ in NEOFETCH_CAMPOS) * CW)
     img, d = moldura(W_BOX, H_BOX, c)
-    y = TB + 16
+    y = TB + 16 * S
     prompt(d, PADX, y, "neofetch", FS, c, CW)
     y += LH * 2
-    ay = y + 8
+    ay = y + 8 * S
     for li, letra in enumerate(NOME_ARTE):
         base = PADX + li * 5 * BLOCO
         for row, bits in enumerate(LETRAS[letra]):
@@ -176,7 +177,7 @@ def stats(tema):
     lab_w = max(len(k) for k, _ in STATS)
     lang_w = max(len(k) for k, _ in LANGS)
     img, d = moldura(W_BOX, H_BOX, c)
-    y = TB + 16
+    y = TB + 16 * S
     prompt(d, PADX, y, "gh profile --stats", FS, c, cw); y += LH * 2
     for k, v in STATS:
         d.text((PADX, y), k.ljust(lab_w), font=f(FONT_R, FS), fill=c["AZUL"])
