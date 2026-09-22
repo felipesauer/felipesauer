@@ -69,6 +69,13 @@ NEOFETCH_ART = [
     "    \\___)=(___/     ",
 ]
 
+# Grafico de barras da janela de stats: o equivalente do Tux.
+# Desenhado com retangulos, nao com "█": o bloco nao preenche a entrelinha
+# inteira e as barras saem com emendas horizontais visiveis.
+STATS_BARRAS = [3, 4, 5, 6]     # altura de cada barra, em celulas
+STATS_COLS = 20                 # mesma largura do Tux, em caracteres
+STATS_LINHAS = 7                # mesma altura do Tux, em linhas
+
 NEOFETCH_CAMPOS = [
     ("OS", "Full Stack Developer"), ("Host", "Brazil"),
     ("Kernel", "TypeScript / PHP"), ("Shell", "bash on Linux"),
@@ -170,6 +177,19 @@ def stats(tema):
     img, d = moldura(W_BOX, H_BOX, c)
     y = TB + 16 * S
     prompt(d, PADX, y, "gh profile --stats", FS, c, cw); y += LH * 2
+
+    # grafico encostado a direita, espelhando o pinguim que fica a esquerda no banner
+    larg_barra = int(cw * 3)
+    vao = int(cw * 2)
+    total = len(STATS_BARRAS) * larg_barra + (len(STATS_BARRAS) - 1) * vao
+    ax = W_BOX - PADX - int(cw * 2) - total
+    base = y + STATS_LINHAS * LH - int(LH * 0.6)
+    for i, alt in enumerate(STATS_BARRAS):
+        x0 = ax + i * (larg_barra + vao)
+        y0 = base - alt * LH
+        d.rectangle([x0, y0, x0 + larg_barra, base - int(LH * 0.15)], fill=c["VERDE"])
+    d.rectangle([ax - int(cw * 0.5), base, ax + total + int(cw * 0.5), base + max(2, S)],
+                fill=c["VERDE"])
     for k, v in STATS:
         d.text((PADX, y), k.ljust(lab_w), font=f(FONT_R, FS), fill=c["AZUL"])
         d.text((PADX + (lab_w + 2) * cw, y), v, font=f(FONT_B, FS), fill=c["FG"])
@@ -177,11 +197,19 @@ def stats(tema):
     y += LH
     for k, pct in LANGS:
         d.text((PADX, y), k.ljust(lang_w), font=f(FONT_R, FS), fill=c["AZUL"])
-        bx = PADX + (lang_w + 2) * cw
-        cheio = int(round(BARRA * pct / 100))
-        d.text((bx, y), "█" * cheio, font=f(FONT_R, FS), fill=c["VERDE"])
-        d.text((bx + cheio * cw, y), "░" * (BARRA - cheio), font=f(FONT_R, FS), fill=c["TRACK"])
-        d.text((bx + (BARRA + 2) * cw, y), f"{pct}%", font=f(FONT_R, FS), fill=c["FG"])
+        # barras desenhadas, nao escritas com "█": o bloco deixa emendas visiveis
+        bx = int(PADX + (lang_w + 2) * cw)
+        trilho = int(BARRA * cw)
+        altura = int(LH * 0.58)
+        topo = int(y + (LH - altura) / 2)
+        raio = max(2, int(2 * S))
+        d.rounded_rectangle([bx, topo, bx + trilho, topo + altura], raio, fill=c["TRACK"])
+        cheio = int(trilho * pct / 100)
+        if cheio > raio * 2:
+            d.rounded_rectangle([bx, topo, bx + cheio, topo + altura], raio, fill=c["VERDE"])
+        elif cheio > 0:
+            d.rectangle([bx, topo, bx + cheio, topo + altura], fill=c["VERDE"])
+        d.text((bx + trilho + int(cw * 2), y), f"{pct}%", font=f(FONT_R, FS), fill=c["FG"])
         y += LH
     return img
 
