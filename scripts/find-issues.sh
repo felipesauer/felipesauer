@@ -55,10 +55,14 @@ for i in dados:
     ]))' >> "$TMP"
 done
 
+# no maximo 3 por repositorio: sem isso um projeto que abre dezenas de issues
+# no mesmo dia (o Symfony faz isso com traducoes) toma a lista inteira
 sort -u "$TMP" | awk -F'\t' -v filtrar="$SO_SEM_DONO" '
   filtrar == "true" && $5 != "0" { next }
   { print }
-' | sort -t$'\t' -k4,4r | head -25 | awk -F'\t' '
+' | sort -t$'\t' -k4,4r | awk -F'\t' '
+  { if (vistos[$1]++ < 3) print }
+' | head -20 | awk -F'\t' '
   BEGIN { printf "\n%-26s  %-58s  %-10s  %s\n", "REPOSITÓRIO", "ISSUE", "ABERTA EM", "COMENTÁRIOS" 
           printf "%s\n", "-------------------------------------------------------------------------------------------------------------" }
   { t = length($2) > 56 ? substr($2, 1, 55) "…" : $2
