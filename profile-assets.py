@@ -110,7 +110,8 @@ def largura_char(fs):
 
 
 def banner(tema):
-    c, FS, LH, PADX = TEMAS[tema], 21, 30, 30
+    # mesma escala do neofetch (FS 17 / LH 25) para as duas janelas casarem na pagina
+    c, FS, LH, PADX = TEMAS[tema], 17, 25, 26
     cw = largura_char(FS)
     saida = ["Full Stack Developer",
              "TypeScript  PHP  React  Node.js  Laravel  PostgreSQL  Docker"]
@@ -119,7 +120,7 @@ def banner(tema):
     img, d = moldura(W, H, c)
     y = TB + 18
     prompt(d, PADX, y, "cat profile.txt", FS, c, cw); y += LH
-    d.text((PADX, y - 2), "Felipe Sauer", font=f(FONT_B, 40), fill=c["VERDE"]); y += LH + 16
+    d.text((PADX, y - 2), "Felipe Sauer", font=f(FONT_B, 32), fill=c["VERDE"]); y += LH + 14
     for s in saida:
         d.text((PADX, y), s, font=f(FONT_R, FS), fill=c["FG"]); y += LH
     x = prompt(d, PADX, y, "", FS, c, cw)
