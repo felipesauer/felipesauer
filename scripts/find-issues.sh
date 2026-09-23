@@ -24,7 +24,10 @@ REPOS=(
 # Os nomes de label mudam de projeto para projeto (o TypeScript usa maiúsculas,
 # o Laravel só tem "help wanted"), por isso varremos as variações.
 LABELS=("good first issue" "Good First Issue" "help wanted" "help-wanted" "E-easy")
-[[ "${1:-}" == "--docs" ]] && LABELS=("documentation" "Documentation" "docs" "needs documentation")
+# "translation" fica de fora de propósito: no Symfony essa label é do componente
+# Translation (bug de código), não trabalho de tradução.
+[[ "${1:-}" == "--docs" ]] && LABELS=("documentation" "Documentation" "docs" "needs documentation"
+                                      "Missing translations" "i18n")
 
 SO_SEM_DONO=true
 [[ "${1:-}" == "--all" ]] && SO_SEM_DONO=false
