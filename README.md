@@ -28,7 +28,7 @@ That balance became a project: [mnema](https://github.com/felipesauer/mnema) kee
 
 <table>
 <tr>
-<td colspan="2" valign="top">
+<td width="50%" valign="top">
 
 ### ▸ [mnema](https://github.com/felipesauer/mnema)
 
@@ -37,8 +37,6 @@ A signed, append-only record of the **decisions behind AI agent work**: the deci
 ![TypeScript](https://img.shields.io/badge/TypeScript-0D1117?style=flat-square&logo=typescript&logoColor=39D353) ![Node.js](https://img.shields.io/badge/Node.js-0D1117?style=flat-square&logo=nodedotjs&logoColor=39D353)
 
 </td>
-</tr>
-<tr>
 <td width="50%" valign="top">
 
 ### ▸ [monitor-sefaz](https://github.com/felipesauer/monitor-sefaz)
