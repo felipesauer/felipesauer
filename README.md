@@ -1,17 +1,3 @@
-<div align="center">
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/felipesauer/felipesauer/main/assets/banner.png?v=20260922124051">
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/felipesauer/felipesauer/main/assets/banner-light.png?v=20260922124051">
-  <img src="https://raw.githubusercontent.com/felipesauer/felipesauer/main/assets/banner.png?v=20260922124051" alt="neofetch output for Felipe Sauer: Full Stack Developer, Brazil, TypeScript and PHP, [...]">
-</picture>
-
-<br><br>
-
-[![Repos](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.github.com%2Fusers%2Ffelipesauer&query=%24.public_repos&label=Repos&style=flat-square&color=39D353&labelColor=0D1117)](https://github.com/felipesauer)
-
-</div>
-
 # Felipe Sauer · Full Stack Developer
 
 **Open to Full Stack opportunities.** Let's talk on [LinkedIn](https://www.linkedin.com/in/felipe-sauer/).
@@ -23,53 +9,6 @@ Hi! I'm a **Full Stack Developer** who ships **libraries with zero production de
 **I write code by hand and use AI when it speeds things up.** The tool changes, the judgment does not: architecture, modeling and review are still engineering work.
 
 That balance became a project: [mnema](https://github.com/felipesauer/mnema) keeps a signed record of the decisions behind AI agent work.
-
-## `$ ls ~/projects`
-
-<table>
-<tr>
-<td width="50%" valign="top">
-
-### ▸ [mnema](https://github.com/felipesauer/mnema)
-
-A signed, append-only record of the **decisions behind AI agent work**: the decision, the reasoning and who wrote it down, inside the repository where the work happens.
-
-![TypeScript](https://img.shields.io/badge/TypeScript-0D1117?style=flat-square&logo=typescript&logoColor=39D353) ![Node.js](https://img.shields.io/badge/Node.js-0D1117?style=flat-square&logo=nodedotjs&logoColor=39D353)
-
-</td>
-<td width="50%" valign="top">
-
-### ▸ [monitor-sefaz](https://github.com/felipesauer/monitor-sefaz)
-
-Open-source status page tracking **135 public services in real time**, with multi-source consensus, uptime history and multi-channel alerts.
-
-![TypeScript](https://img.shields.io/badge/TypeScript-0D1117?style=flat-square&logo=typescript&logoColor=39D353) ![React](https://img.shields.io/badge/React-0D1117?style=flat-square&logo=react&logoColor=39D353)
-
-[Live site](https://felipesauer.github.io/monitor-sefaz/)
-
-</td>
-</tr>
-<tr>
-<td width="50%" valign="top">
-
-### ▸ [safeaccess-identum](https://github.com/felipesauer/safeaccess-identum)
-
-Brazilian document validation (CPF, CNPJ, CNH, CEP, CNS, PIS, RENAVAM, Mercosul plate) with an **identical API** in [PHP](https://github.com/felipesauer/safeaccess-identum-php) and [TypeScript](https://github.com/felipesauer/safeaccess-identum-ts).
-
-![PHP](https://img.shields.io/badge/PHP-0D1117?style=flat-square&logo=php&logoColor=39D353) ![TypeScript](https://img.shields.io/badge/TypeScript-0D1117?style=flat-square&logo=typescript&logoColor=39D353)
-
-</td>
-<td width="50%" valign="top">
-
-### ▸ [safeaccess-inline](https://github.com/felipesauer/safeaccess-inline)
-
-Safe access to **nested data via dot notation** across JSON, YAML, XML, INI, ENV and NDJSON, with security validation and immutable writes. In [PHP](https://github.com/felipesauer/safeaccess-inline-php) and [TypeScript](https://github.com/felipesauer/safeaccess-inline-ts).
-
-![PHP](https://img.shields.io/badge/PHP-0D1117?style=flat-square&logo=php&logoColor=39D353) ![TypeScript](https://img.shields.io/badge/TypeScript-0D1117?style=flat-square&logo=typescript&logoColor=39D353)
-
-</td>
-</tr>
-</table>
 
 ## `$ cat stack.txt`
 
@@ -88,22 +27,10 @@ Safe access to **nested data via dot notation** across JSON, YAML, XML, INI, ENV
 - Offline-first applications and edge computing
 - Writing code the next developer understands without asking me
 
-## `$ gh profile --stats`
-
-<div align="center">
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/felipesauer/felipesauer/main/assets/stats.png?v=20260922124051">
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/felipesauer/felipesauer/main/assets/stats-light.png?v=20260922124051">
-  <img src="https://raw.githubusercontent.com/felipesauer/felipesauer/main/assets/stats.png?v=20260922124051" alt="GitHub stats: 10 public repositories, 38 stars, 16 followers, 1442 commits in the last year">
-</picture>
-
-</div>
-
 ## `$ contact --list`
 
 <div align="center">
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0D1117?style=for-the-badge&logo=linkedin&logoColor=39D353)](https://www.linkedin.com/in/felipe-sauer/) [![GitHub](https://img.shields.io/badge/GitHub-0D1117?style=for-the-badge&logo=github&logoColor=39D353)](https://github.com/felipesauer)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/felipe-sauer/) [![GitHub](https://img.shields.io/badge/GitHub-0D1117?style=for-the-badge&logo=github&logoColor=39D353)](https://github.com/felipesauer)
 
 </div>
